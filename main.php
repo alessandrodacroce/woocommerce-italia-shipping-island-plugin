@@ -4,7 +4,7 @@ Plugin Name: Woocommerce Shipping Island
 Plugin URI: http://www.alessandrodacroce.it/progetto/plugin-woocommerce-spedizione-verso-le-isole/
 Description: Aggiunge la gestione della spedizione verso le Isole aggiungendo un costo extra
 Author: Alessandro Dacroce <adacroce [AT] gmail [DOT] com>
-Version: 0.0.1
+Version: 0.0.2
 Author URI: http://alessandrodacroce.it/
 License: MIT
 */
@@ -71,6 +71,12 @@ function your_shipping_method_init() {
                         'description' => __( 'Il costo che verrà applicato se la spedizione è verso le isole', 'woocommerce' ),
                         'default' => ( isset($wc_shipping_island["costo"]) && (strlen($wc_shipping_island["title"]) > 1 ) ) ? $wc_shipping_island["costo"] :  __("7.5", 'woocommerce')
                     ),
+                    'tax_costo' => array(
+                        'title' => __( 'Attivare la tassazione', 'woocommerce' ),
+                        'type' => 'text',
+                        'description' => __( 'Se true, al costo sarà applicata la tassa impostata', 'woocommerce' ),
+                        'default' => ( isset($wc_shipping_island["tax_costo"]) && (strlen($wc_shipping_island["tax_costo"]) > 3 ) ) ? $wc_shipping_island["tax_costo"] :  __("false", 'woocommerce')
+                    ),
                     'isole' => array(
                         'title'     => __( 'Seleziona iniziale CAP isole' ),
                         'type'      => 'textarea',
@@ -89,6 +95,7 @@ function your_shipping_method_init() {
                     'stato'         => $_POST['woocommerce_Shipping_Island_stato'],
                     'title'         => $_POST['woocommerce_Shipping_Island_title'],
                     'costo'         => $_POST['woocommerce_Shipping_Island_costo'],
+                    'tax_costo'     => $_POST['woocommerce_Shipping_Island_tax_costo'], 
                     'cap'           => $cap_isole
                 );
                 
@@ -135,14 +142,15 @@ function woocommerce_custom_surcharge() {
           return;
        
        $cap = $woocommerce->customer->get_shipping_postcode();
-       $surcharge     = $wc_shipping_island["costo"];
     
        $cap_isole = $wc_shipping_island["cap"];
-       //print_r( $cap_isole ) ; die();
+    
+       if ( $wc_shipping_island["tax_costo"] == 'false' ) 
+            $class_tax = 'NO-IMPONIBILE';  
     
        foreach ( $cap_isole as $cap_isola ) {
           if ( string_starts_with( $cap, $cap_isola ) ){
-             $woocommerce->cart->add_fee( $wc_shipping_island["title"], $surcharge, true, '' );
+             $woocommerce->cart->add_fee(  $wc_shipping_island["title"], $wc_shipping_island["costo"], $wc_shipping_island["tax_costo"], $class_tax );
           }
        }
     }
