@@ -2,9 +2,9 @@
 /*
 Plugin Name: Woocommerce Shipping Island
 Plugin URI: http://www.alessandrodacroce.it/progetto/plugin-woocommerce-spedizione-verso-le-isole/
-Description: Add other method to add other fee for island shipping - italian market
-Author: Alessandro Dacroce <adacroce@gmail.com>
-Version: 0.1-beta
+Description: Aggiunge la gestione della spedizione verso le Isole aggiungendo un costo extra
+Author: Alessandro Dacroce <adacroce [AT] gmail [DOT] com>
+Version: 0.0.1
 Author URI: http://alessandrodacroce.it/
 License: MIT
 */
