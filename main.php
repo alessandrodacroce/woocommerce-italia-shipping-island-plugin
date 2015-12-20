@@ -6,8 +6,7 @@ Description: Add other method to add other fee for island shipping - italian mar
 Author: Alessandro Dacroce <adacroce@gmail.com>
 Version: 0.1-beta
 Author URI: http://alessandrodacroce.it/
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+License: MIT
 */
 
 // Make sure we don't expose any info if called directly
