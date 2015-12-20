@@ -1,7 +1,4 @@
 <?php
-
-// Main load plug-in
-
 /*
 Plugin Name: Woocommerce Shipping Island
 Plugin URI: http://www.alessandrodacroce.it/progetto/plugin-woocommerce-spedizione-verso-le-isole/
@@ -32,7 +29,6 @@ function your_shipping_method_init() {
                 $this->id                   = 'Shipping Island';
                 $this->title                = __( 'Shipping Island' );
                 $this->method_description   = __( 'Adds fee if the shipment to the islands' ); // 
-                $this->enabled              = "yes"; // This can be added as an setting but for this example its forced enabled
                 $this->init();
             }
     
@@ -48,23 +44,10 @@ function your_shipping_method_init() {
                 $this->init_settings(); // This is part of the settings API. Loads settings you previously init.
    
                 // Save settings in admin if you have any defined
-                add_action( 'woocommerce_update_options_shipping_' . $this->id  , array( $this, 'process_admin_options' ) ); 
+                add_action('woocommerce_update_options_shipping_' . $this->id  , array( $this, 'process_admin_options' ) ); 
                 add_action('woocommerce_update_options_shipping_methods', array(&$this, 'process_admin_options'));
                 
-                $this->init_form_fields();
             }
-                
-            /**
-             * calculate_shipping function.
-             *
-             * @access public
-             * @param mixed $package
-             * @return void
-             */
-            public function calculate_shipping( $package ) {
-                // This is where you'll add your rates
-            }
-            
             
             function init_form_fields() {
                 
@@ -75,27 +58,28 @@ function your_shipping_method_init() {
                         'title' => __( 'Stato', 'woocommerce' ),
                         'type' => 'text',
                         'description' => __( 'Scrivere off per disattivare il plugin, altrimenti on per attivarlo', 'woocommerce' ),
-                        'default' => ( isset($wc_shipping_island) ) ? $wc_shipping_island["stato"] :  __( 'on', 'woocommerce' )
+                        'default' => ( isset($wc_shipping_island["stato"]) && (strlen($wc_shipping_island["stato"]) > 2 ) ) ? $wc_shipping_island["stato"] :  __( 'on', 'woocommerce' )
                     ),
                     'title' => array(
                         'title' => __( 'Title', 'woocommerce' ),
                         'type' => 'text',
                         'description' => __( 'This controls the title which the user sees during checkout.', 'woocommerce' ),
-                        'default' => ( isset($wc_shipping_island) ) ? $wc_shipping_island["title"] :  __( 'Gestione Isole', 'woocommerce' )
+                        'default' => ( isset($wc_shipping_island["title"]) && (strlen($wc_shipping_island["title"]) > 3 ) ) ? $wc_shipping_island["title"] :  __( 'Gestione Isole', 'woocommerce' )
                     ),
                     'costo' => array(
                         'title' => __( 'Costo gestione', 'woocommerce' ),
                         'type' => 'text',
                         'description' => __( 'Il costo che verrà applicato se la spedizione è verso le isole', 'woocommerce' ),
-                        'default' => ( isset($wc_shipping_island) ) ? $wc_shipping_island["costo"] :  __("7.5", 'woocommerce')
+                        'default' => ( isset($wc_shipping_island["costo"]) && (strlen($wc_shipping_island["title"]) > 1 ) ) ? $wc_shipping_island["costo"] :  __("7.5", 'woocommerce')
                     ),
                     'isole' => array(
                         'title'     => __( 'Seleziona iniziale CAP isole' ),
                         'type'      => 'textarea',
                         'description' => __( 'Seleziona l\'iniziale del CAP per le isole per le quali vuoi attivare questo pagamento', 'woocommerce' ),
-                        'default'   => ( isset($wc_shipping_island) ) ? implode(", ", $wc_shipping_island["cap"]) :  '07, 08, 09, 92, 93, 95,  94, 98, 90, 96, 97, 91, 86, 87, 88'
+                        'default'   => ( isset($wc_shipping_island["cap"]) && (strlen($wc_shipping_island["title"]) > 3 ) ) ? implode(", ", $wc_shipping_island["cap"]) :  '07, 08, 09, 92, 93, 95,  94, 98, 90, 96, 97, 91, 86, 87, 88'
                     )
                 );
+                
             } // End init_form_fields()
             
             function process_admin_options(){
